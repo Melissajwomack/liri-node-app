@@ -11,7 +11,6 @@ var request = require('request');
 //moment npm
 var moment = require('moment');
 
-
 //spotify keys
 var keys = require('./keys.js');
 
@@ -49,7 +48,7 @@ switch (action) {
     case "do-what-it-says":
         doIt();
         break;
-}
+};
 
 //Bandintown request:
 function bandsintown() {
@@ -61,8 +60,9 @@ function bandsintown() {
     var bandsintownUrl = "https://rest.bandsintown.com/artists/" + valueC + "/events?app_id=codingbootcamp";
 
     request(bandsintownUrl, function (error, response, body) {
-        if (error) return log("Error occured: " + error);
-
+        if (error) {
+            return log("Error occured: " + error);
+        };
         if (!error && response.statusCode == 200) {
             var data = JSON.parse(body);
             log(chalk.cyan("\nUpcoming shows for " + chalk.yellow.underline(value) + ":\n"));
@@ -74,8 +74,8 @@ function bandsintown() {
                 log(chalk.cyan("Country: ") + data[i].venue.country);
                 log(chalk.cyan("Date and Time: ") + moment(data[i].datetime).format("MM/DD/YYYY"));
                 log(chalk.yellow("---------"));
-            }
-        }
+            };
+        };
     });
 };
 
@@ -86,7 +86,7 @@ function spotifyFunc() {
         spotify.search({ type: 'track', query: 'The Sign Ace of Base', limit: 1 }, function (err, data) {
             if (err) {
                 return log('Error occurred: ' + err);
-            }
+            };
             log(chalk.yellow("---------"));
             log(chalk.cyan("Song: ") + (data.tracks.items[0].name));
             log(chalk.cyan("Artist: ") + (data.tracks.items[0].artists[0].name));
@@ -100,7 +100,7 @@ function spotifyFunc() {
         spotify.search({ type: 'track', query: value }, function (err, data) {
             if (err) {
                 return log('Error occurred: ' + err);
-            }
+            };
             for (i = 0; i < 4; i++) {
                 log(chalk.yellow("---------"));
                 log(chalk.cyan("Song: ") + (data.tracks.items[i].name));
@@ -108,11 +108,10 @@ function spotifyFunc() {
                 log(chalk.cyan("Album: ") + (data.tracks.items[i].album.name));
                 log(chalk.cyan("Song Preview: ") + (data.tracks.items[i].preview_url));
                 log(chalk.yellow("---------"));
-            }
+            };
         });
-    }
-
-}
+    };
+};
 
 
 
