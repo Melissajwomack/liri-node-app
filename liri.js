@@ -100,152 +100,84 @@ function bandsintown() {
 //Spotify request:
 function spotifyFunc() {
     //If no song choice
-    if (!value) {
-        spotify.search({ type: 'track', query: 'The Sign Ace of Base', limit: 1 }, function (err, data) {
-            if (err) {
-                return log('Error occurred: ' + err);
-            };
-            if (!err) {
-                log(chalk.yellow("---------"));
-                log(chalk.cyan("Song: ") + (data.tracks.items[0].name));
-                log(chalk.cyan("Artist: ") + (data.tracks.items[0].artists[0].name));
-                log(chalk.cyan("Album: ") + (data.tracks.items[0].album.name));
-                log(chalk.cyan("Song Preview: ") + (data.tracks.items[0].preview_url));
-                log(chalk.yellow("---------"));
+    if (!value) { value = 'The Sign Ace of Base' }
 
-                //Log data in log.txt
-                var logData =
-                    "----------------" + "\n" +
-                    "Command: " + action + "\n" +
-                    "Search: " + value + "\n" +
-                    "Song: " + data.tracks.items[0].name + "\n" +
-                    "Artist: " + data.tracks.items[0].artists[0].name + "\n" +
-                    "Album: " + data.tracks.items[0].album.name + "\n" +
-                    "Song Preview: " + data.tracks.items[0].preview_url + "\n" +
-                    "----------------"
-                logIt(logData);
-            }
-        });
-    }
-    else {
-        spotify.search({ type: 'track', query: value, limit: 3 }, function (err, data) {
-            if (err) {
-                return log('Error occurred: ' + err);
-            };
-            for (i = 0; i < data.tracks.items.length; i++) {
-                log(chalk.yellow("---------"));
-                log(chalk.cyan("Song: ") + (data.tracks.items[i].name));
-                log(chalk.cyan("Artist: ") + (data.tracks.items[i].artists[0].name));
-                log(chalk.cyan("Album: ") + (data.tracks.items[i].album.name));
-                log(chalk.cyan("Song Preview: ") + (data.tracks.items[i].preview_url));
-                log(chalk.yellow("---------"));
-            };
+    spotify.search({ type: 'track', query: value, limit: 3 }, function (err, data) {
+        if (err) {
+            return log('Error occurred: ' + err);
+        };
+        for (i = 0; i < data.tracks.items.length; i++) {
+            log(chalk.yellow("---------"));
+            log(chalk.cyan("Song: ") + (data.tracks.items[i].name));
+            log(chalk.cyan("Artist: ") + (data.tracks.items[i].artists[0].name));
+            log(chalk.cyan("Album: ") + (data.tracks.items[i].album.name));
+            log(chalk.cyan("Song Preview: ") + (data.tracks.items[i].preview_url));
+            log(chalk.yellow("---------"));
+        };
 
-            //Log data in log.txt
-            for (i = 0; i < data.tracks.items.length; i++) {
-                var logData =
-                    "----------------" + "\n" +
-                    "Command: " + action + "\n" +
-                    "Search: " + value + "\n" +
-                    "Song: " + data.tracks.items[i].name + "\n" +
-                    "Artist: " + data.tracks.items[i].artists[0].name + "\n" +
-                    "Album: " + data.tracks.items[i].album.name + "\n" +
-                    "Song Preview: " + data.tracks.items[i].preview_url + "\n" +
-                    "----------------" + "\n"
-                logIt(logData);
-            };
-        });
-    };
+        //Log data in log.txt
+        for (i = 0; i < data.tracks.items.length; i++) {
+            var logData =
+                "----------------" + "\n" +
+                "Command: " + action + "\n" +
+                "Search: " + value + "\n" +
+                "Song: " + data.tracks.items[i].name + "\n" +
+                "Artist: " + data.tracks.items[i].artists[0].name + "\n" +
+                "Album: " + data.tracks.items[i].album.name + "\n" +
+                "Song Preview: " + data.tracks.items[i].preview_url + "\n" +
+                "----------------" + "\n"
+            logIt(logData);
+        };
+    });
 };
 
 function omdbFunc() {
-    if (!value) {
-        var omdbUrl = "http://www.omdbapi.com/?t=Mr+Nobody&type=movie&y=&plot=short&r=json&apikey=trilogy";
-        request(omdbUrl, function (err, response, body) {
-            if (err) {
-                return log("Error occured: " + err);
-            };
-            if (!err && response.statusCode == 200) {
-                var data = JSON.parse(body);
-                log(chalk.yellow("---------"));
-                log(chalk.cyan("Movie Title: ") + data.Title);
-                log(chalk.cyan("Release Year: ") + data.Released);
-                log(chalk.cyan("IMDB Rating: ") + data.imdbRating);
-                for (i = 0; i < data.Ratings.length; i++) {
-                    if (data.Ratings[i].Source === 'Rotten Tomatoes') {
-                        var rottenRating = data.Ratings[i].Value;
-                        log(chalk.cyan("Rotten Tomatoes Rating: ") + rottenRating);
-                    };
+    //If no movie choice
+    if (!value) { value = 'Mr. Nobody' }
+
+    //Convert user input to format for url
+    var valueC = value.trim().replace(/ /g, "+");
+
+    var omdbUrl = "http://www.omdbapi.com/?t=" + valueC + "&type=movie&y=&plot=short&r=json&apikey=trilogy";
+    request(omdbUrl, function (err, response, body) {
+        if (err) {
+            return log("Error occured: " + err);
+        };
+        if (!err && response.statusCode == 200) {
+            var data = JSON.parse(body);
+            log(chalk.yellow("---------"));
+            log(chalk.cyan("Movie Title: ") + data.Title);
+            log(chalk.cyan("Release Year: ") + data.Released);
+            log(chalk.cyan("IMDB Rating: ") + data.imdbRating);
+            for (i = 0; i < data.Ratings.length; i++) {
+                if (data.Ratings[i].Source === 'Rotten Tomatoes') {
+                    var rottenRating = data.Ratings[i].Value;
+                    log(chalk.cyan("Rotten Tomatoes Rating: ") + data.Ratings[i].Value);
                 };
-                log(chalk.cyan("Country: ") + data.Country);
-                log(chalk.cyan("Language: ") + data.Language);
-                log(chalk.cyan("Plot: ") + data.Plot);
-                log(chalk.cyan("Actors: ") + data.Actors);
-                log(chalk.yellow("---------"));
-
-                //Log data in log.txt
-                var logData =
-                    "----------------" + "\n" +
-                    "Command: " + action + "\n" +
-                    "Search: " + value + "\n" +
-                    "Movie Title: " + data.Title + "\n" +
-                    "Release Year: " + data.Release + "\n" +
-                    "IMDB Rating: " + data.imdbRating + "\n" +
-                    "Rotten Tomatoes Rating: " + rottenRating + "\n" +
-                    "Country: " + data.Country + "\n" +
-                    "Language: " + data.Language + "\n" +
-                    "Plot: " + data.Plot + "\n" +
-                    "Actors: " + data.Actors + "\n" +
-                    "----------------"
-                logIt(logData);
             };
-        });
-    }
-    else {
-        //Convert user input to format for url
-        var valueC = value.trim().replace(/ /g, "+");
+            log(chalk.cyan("Country: ") + data.Country);
+            log(chalk.cyan("Language: ") + data.Language);
+            log(chalk.cyan("Plot: ") + data.Plot);
+            log(chalk.cyan("Actors: ") + data.Actors);
+            log(chalk.yellow("---------"));
 
-        var omdbUrl = "http://www.omdbapi.com/?t=" + valueC + "&type=movie&y=&plot=short&r=json&apikey=trilogy";
-        request(omdbUrl, function (err, response, body) {
-            if (err) {
-                return log("Error occured: " + err);
-            };
-            if (!err && response.statusCode == 200) {
-                var data = JSON.parse(body);
-                log(chalk.yellow("---------"));
-                log(chalk.cyan("Movie Title: ") + data.Title);
-                log(chalk.cyan("Release Year: ") + data.Released);
-                log(chalk.cyan("IMDB Rating: ") + data.imdbRating);
-                for (i = 0; i < data.Ratings.length; i++) {
-                    if (data.Ratings[i].Source === 'Rotten Tomatoes') {
-                        var rottenRating = data.Ratings[i].Value;
-                        log(chalk.cyan("Rotten Tomatoes Rating: ") + data.Ratings[i].Value);
-                    };
-                };
-                log(chalk.cyan("Country: ") + data.Country);
-                log(chalk.cyan("Language: ") + data.Language);
-                log(chalk.cyan("Plot: ") + data.Plot);
-                log(chalk.cyan("Actors: ") + data.Actors);
-                log(chalk.yellow("---------"));
-
-                //Log data in log.txt
-                var logData =
-                    "----------------" + "\n" +
-                    "Command: " + action + "\n" +
-                    "Search: " + value + "\n" +
-                    "Movie Title: " + data.Title + "\n" +
-                    "Release Year: " + data.Release + "\n" +
-                    "IMDB Rating: " + data.imdbRating + "\n" +
-                    "Rotten Tomatoes Rating: " + rottenRating + "\n" +
-                    "Country: " + data.Country + "\n" +
-                    "Language: " + data.Language + "\n" +
-                    "Plot: " + data.Plot + "\n" +
-                    "Actors: " + data.Actors + "\n" +
-                    "----------------"
-                logIt(logData);
-            };
-        });
-    }
+            //Log data in log.txt
+            var logData =
+                "----------------" + "\n" +
+                "Command: " + action + "\n" +
+                "Search: " + value + "\n" +
+                "Movie Title: " + data.Title + "\n" +
+                "Release Year: " + data.Release + "\n" +
+                "IMDB Rating: " + data.imdbRating + "\n" +
+                "Rotten Tomatoes Rating: " + rottenRating + "\n" +
+                "Country: " + data.Country + "\n" +
+                "Language: " + data.Language + "\n" +
+                "Plot: " + data.Plot + "\n" +
+                "Actors: " + data.Actors + "\n" +
+                "----------------"
+            logIt(logData);
+        };
+    });
 };
 
 function doIt() {
