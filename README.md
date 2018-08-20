@@ -6,7 +6,7 @@ This app is a language interpretation and recognition interface (liri) that take
 ## How to use the app
 To use this app enter the following in the command line:
 
-**node liri.js command search term**
+`node liri.js command search term`
 
 ### Commands include:
 
