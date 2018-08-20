@@ -23,7 +23,6 @@ var spotifyKey = keys.spotify;
 
 //spotify npm:
 var Spotify = require('node-spotify-api');
-
 var spotify = new Spotify({
     id: spotifyKey.id,
     secret: spotifyKey.secret
@@ -61,9 +60,7 @@ function bandsintown() {
     //Convert user input to format for url
     var valueC = value.trim().replace(/ /g, "+");
 
-    //Bandsintown Url
     var bandsintownUrl = "https://rest.bandsintown.com/artists/" + valueC + "/events?app_id=codingbootcamp";
-
     request(bandsintownUrl, function (err, response, body) {
         if (err) {
             return log("Error occured: " + err);
@@ -100,7 +97,7 @@ function bandsintown() {
 //Spotify request:
 function spotifyFunc() {
     //If no song choice
-    if (!value) { value = 'The Sign Ace of Base' }
+    if (!value) { value = 'The Sign Ace of Base' };
 
     spotify.search({ type: 'track', query: value, limit: 3 }, function (err, data) {
         if (err) {
@@ -131,6 +128,7 @@ function spotifyFunc() {
     });
 };
 
+//omdb Request
 function omdbFunc() {
     //If no movie choice
     if (!value) { value = 'Mr. Nobody' }
@@ -203,13 +201,13 @@ function doIt() {
                 break;
         };
     });
-}
+};
 
 function logIt(appendedInfo) {
     fs.appendFile("log.txt", appendedInfo, function (err) {
         if (err) {
             return log("Error occured: " + err);
-        }
+        };
     });
 };
 
