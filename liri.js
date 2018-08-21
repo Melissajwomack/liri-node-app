@@ -88,7 +88,7 @@ function bandsintown() {
                 "Region: " + data[i].venue.region + "\n" +
                 "Country: " + data[i].venue.country + "\n" +
                 "Date and Time: " + moment(data[i].datetime).format("MM/DD/YYYY") + "\n" +
-                "----------------"
+                "----------------" + "\n"
             logIt(logData);
         };
     });
@@ -172,7 +172,7 @@ function omdbFunc() {
                 "Language: " + data.Language + "\n" +
                 "Plot: " + data.Plot + "\n" +
                 "Actors: " + data.Actors + "\n" +
-                "----------------"
+                "----------------" + "\n"
             logIt(logData);
         };
     });
