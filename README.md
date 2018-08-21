@@ -3,6 +3,8 @@
 ## About the app
 This app is a language interpretation and recognition interface (liri) that takes in commands and search parameters and returns data on the command line. Search types include songs via Spotify, movies via OMDB, and artists show locations via Bandsintown. The app can also search for predefined commands and searches found in the random.txt file.
 
+Click Here: https://melissajwomack.github.io/liri-node-app/
+
 ## How to use the app
 To use this app enter the following in the command line:
 
@@ -20,6 +22,6 @@ To use this app enter the following in the command line:
    
 ### Searches can include any term that is relevant
 
-Click Here: 
+Click Here: https://melissajwomack.github.io/liri-node-app/
 
    
